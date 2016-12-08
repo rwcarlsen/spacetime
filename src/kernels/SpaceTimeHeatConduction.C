@@ -1,0 +1,76 @@
+
+#include "SpaceTimeHeatConduction.h"
+
+template<>
+InputParameters validParams<SpaceTimeHeatConduction>()
+{
+  InputParameters pars = validParams<Kernel>();
+  pars.addClassDescription("Heat conduction treating the 1st spatial dim as time.");
+  pars.addParam<Real>("k", 1.0, "thermal conductivity (W/m/K)");
+  pars.addParam<Real>("heat_cap", 1.0, "heat capacity (J/kg/K)");
+  pars.addParam<Real>("density", 1000, "material density (kg/m^3)");
+  pars.addParam<Real>("source_rad", 1.0, "source radius (m)");
+  pars.addParam<Real>("source", 1000, "source strength (W/m^3)");
+  pars.addRequiredParam<std::vector<Real>>("source_t", "source t positions (m)");
+  pars.addRequiredParam<std::vector<Real>>("source_x", "source x positions (m)");
+  pars.addRequiredParam<std::vector<Real>>("source_y", "source y positions (m)");
+  return pars;
+}
+
+SpaceTimeHeatConduction::SpaceTimeHeatConduction(const InputParameters & pars)
+  : Kernel(pars),
+    _k(pars.get<Real>("k")),
+    _heat_cap(pars.get<Real>("heat_cap")),
+    _density(pars.get<Real>("density")),
+    _source_rad(pars.get<Real>("source_rad")),
+    _source(pars.get<Real>("source")),
+    _source_t(pars.get<std::vector<Real>>("source_t")),
+    _source_x(pars.get<std::vector<Real>>("source_x")),
+    _source_y(pars.get<std::vector<Real>>("source_y"))
+{
+}
+
+Real
+SpaceTimeHeatConduction::computeQpResidual()
+{
+  Real residual = 0;
+
+  // spatial temperature diffusion term:
+  // int(k*gradw*gradu dV)
+  // mask gradient to exclude time dimension
+  auto grad_u = VectorValue<RealGradient>(_grad_u[_qp]);
+  grad_u(0) = 0;
+  residual += _k * _grad_test[_i][_qp] * grad_u[_qp];
+
+  // source term:
+  // int(w*S dV)
+  residual += _test[_i] * source();
+
+  // temperature time derivative term
+  // rho*c_v*int(w*gradu dV)
+  // mask gradient to exclude spatial dimensions
+  grad_u = VectorValue<RealGradient>(_grad_u[_qp]);
+  for (int i = 1; i < LIBMESH_DIM; i++)
+    grad_u[i] = 0
+  residual += -1 * _density * _heat_cap * _test[_i] * grad_u;
+
+  return residual;
+}
+
+Real
+SpaceTimeHeatConduction::source() {
+  Point p = _q_point[_qp];
+  LinearInterpolation xlin(_source_t, _source_x);
+  LinearInterpolation ylin(_source_t, _source_y);
+  Real x = xlin.sample(p(0));
+  Real y = ylin.sample(p(0));
+
+  Real dist = std::sqrt((p(1) - x)*(p(1) - x) + (p(2) - y)*(p(2) - y));
+  if (dist > _source_rad)
+    return 0;
+  return _source;
+}
+
+Real
+SpaceTimeHeatConduction::computeQpJacobian() { return 0; }
+
