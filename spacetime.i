@@ -21,6 +21,10 @@
 []
 
 [Kernels]
+  #[./diff]
+  #  type = Diffusion
+  #  variable = T
+  #[../]
   [./diff]
     type = SpaceTimeHeatConduction
     variable = T
