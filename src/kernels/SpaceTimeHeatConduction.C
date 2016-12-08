@@ -1,5 +1,6 @@
 
 #include "SpaceTimeHeatConduction.h"
+#include "LinearInterpolation.h"
 
 template<>
 InputParameters validParams<SpaceTimeHeatConduction>()
@@ -38,21 +39,19 @@ SpaceTimeHeatConduction::computeQpResidual()
   // spatial temperature diffusion term:
   // int(k*gradw*gradu dV)
   // mask gradient to exclude time dimension
-  auto grad_u = VectorValue<RealGradient>(_grad_u[_qp]);
+  auto grad_u = RealGradient(_grad_u[_qp]);
   grad_u(0) = 0;
-  residual += _k * _grad_test[_i][_qp] * grad_u[_qp];
+  residual += _k * _grad_test[_i][_qp] * grad_u;
 
   // source term:
   // int(w*S dV)
-  residual += _test[_i] * source();
+  residual += _test[_i][_qp] * source();
 
   // temperature time derivative term
   // rho*c_v*int(w*gradu dV)
   // mask gradient to exclude spatial dimensions
-  grad_u = VectorValue<RealGradient>(_grad_u[_qp]);
-  for (int i = 1; i < LIBMESH_DIM; i++)
-    grad_u[i] = 0
-  residual += -1 * _density * _heat_cap * _test[_i] * grad_u;
+  grad_u = RealGradient(_grad_u[_qp]);
+  residual += -1 * _density * _heat_cap * _test[_i][_qp] * grad_u(0);
 
   return residual;
 }
