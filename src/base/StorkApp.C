@@ -1,7 +1,6 @@
 #include "StorkApp.h"
 #include "Moose.h"
 #include "AppFactory.h"
-#include "ModulesApp.h"
 #include "MooseSyntax.h"
 
 #include "SpaceTimeHeatConduction.h"
@@ -18,11 +17,9 @@ StorkApp::StorkApp(InputParameters parameters) :
     MooseApp(parameters)
 {
   Moose::registerObjects(_factory);
-  ModulesApp::registerObjects(_factory);
   StorkApp::registerObjects(_factory);
 
   Moose::associateSyntax(_syntax, _action_factory);
-  ModulesApp::associateSyntax(_syntax, _action_factory);
   StorkApp::associateSyntax(_syntax, _action_factory);
 }
 

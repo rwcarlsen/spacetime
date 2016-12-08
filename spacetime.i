@@ -13,6 +13,10 @@
 
 [Variables]
   [./T]
+    [./InitialCondition]
+      type = ConstantIC
+      value = 5.0
+    [../]
   [../]
 []
 
@@ -31,43 +35,38 @@
 []
 
 [BCs]
-  #type = FunctionDirichletBC
-  #function = x
-  #[./bottom] # t=0
-  #  type = DirichletBC
-  #  variable = T
-  #  boundary = bottom
-  #  value = 0
-  #[../]
-  #[./top] # t=T
-  #  type = BC
-  #  k = 1.0
-  #  variable = T
-  #  boundary = bottom
-  #[../]
-  [./left] # x=0
+  [./bottom] # x=0
     type = DirichletBC
     variable = T
-    boundary = left
-    value = 10
-  [../]
-  [./right] # x=L
-    type = DirichletBC
-    variable = T
-    boundary = right
-    value = 10
+    boundary = bottom
+    value = 5
   [../]
   [./top] # x=L
     type = DirichletBC
     variable = T
     boundary = top
-    value =5 
-  [../]
-  [./bottom] # x=L
-    type = DirichletBC
-    variable = T
-    boundary = bottom
     value = 5
+  [../]
+  [./left] # t=0
+    type = FunctionDirichletBC
+    function = bc_func
+    variable = T
+    boundary = left
+  [../]
+  #[./right] # t=T
+  #  type = BC
+  #  k = 1.0
+  #  variable = T
+  #  boundary = right
+  #[../]
+[]
+
+[Functions]
+  [./bc_func]
+    type = ParsedFunction
+    value = sqrt(25-(y-5)^2)+5
+    #vars = 'alpha'
+    #vals = '16'
   [../]
 []
 
@@ -77,6 +76,15 @@
   petsc_options_iname = '-pc_type -pc_hypre_type'
   petsc_options_value = 'hypre boomeramg'
 []
+
+#[Preconditioning]
+#  active = 'FDP'
+#
+#  [./FDP]
+#    type = FDP
+#    full = true
+#  [../]
+#[]
 
 [Outputs]
   exodus = true

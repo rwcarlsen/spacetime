@@ -48,13 +48,13 @@ SpaceTimeHeatConduction::computeQpResidual()
   // int(w*S dV)
   residual += _test[_i][_qp] * source();
 
+  std::cout << "i=" << _i << ",j=" << _j << ", x=" << _q_point[_qp](1) << ", t=" << _q_point[_qp](0) << "\n";
+  std::cout << "    gradu_x=" << _grad_u[_qp](1) << ", gradu_t=" << _grad_u[_qp](0) << "\n";
+  std::cout << "    xresidual=" << residual << ", tresidual=" << -1 * _density * _heat_cap * _test[_i][_qp] * _grad_u[_qp](0) << "\n";
   // temperature time derivative term
   // rho*c_v*int(w*gradu dV)
   // mask gradient to exclude spatial dimensions
   residual += -1 * _density * _heat_cap * _test[_i][_qp] * _grad_u[_qp](0);
-
-  std::cout << "gradu_x=" << grad_u(1) << ", gradu_t=" << _grad_u[_qp](0) << "\n";
-  std::cout << "i=" << _i << ", j=" << _j << ", qp=" << _q_point[_qp] << ", xresidual=" << residual << ", tresidual=" << -1 * _density * _heat_cap * _test[_i][_qp] * _grad_u[_qp](0) << "\n";
 
   return residual;
 }
@@ -74,5 +74,7 @@ SpaceTimeHeatConduction::source() {
 }
 
 Real
-SpaceTimeHeatConduction::computeQpJacobian() { return 0; }
+SpaceTimeHeatConduction::computeQpJacobian() {
+  return 0;
+}
 
