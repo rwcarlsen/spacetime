@@ -4,6 +4,9 @@
 #include "ModulesApp.h"
 #include "MooseSyntax.h"
 
+#include "SpaceTimeHeatConduction.h"
+#include "BC.h"
+
 template<>
 InputParameters validParams<StorkApp>()
 {
@@ -40,6 +43,8 @@ extern "C" void StorkApp__registerObjects(Factory & factory) { StorkApp::registe
 void
 StorkApp::registerObjects(Factory & factory)
 {
+  registerObject(SpaceTimeHeatConduction);
+  registerObject(BC);
 }
 
 // External entry point for dynamic syntax association

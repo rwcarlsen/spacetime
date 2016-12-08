@@ -11,7 +11,7 @@ InputParameters validParams<SpaceTimeHeatConduction>()
   pars.addParam<Real>("heat_cap", 1.0, "heat capacity (J/kg/K)");
   pars.addParam<Real>("density", 1000, "material density (kg/m^3)");
   pars.addParam<Real>("source_rad", 1.0, "source radius (m)");
-  pars.addParam<Real>("source", 1000, "source strength (W/m^3)");
+  pars.addParam<Real>("source", 1.0, "source strength (W/m^3)");
   pars.addRequiredParam<std::vector<Real>>("source_t", "source t positions (m)");
   pars.addRequiredParam<std::vector<Real>>("source_x", "source x positions (m)");
   pars.addRequiredParam<std::vector<Real>>("source_y", "source y positions (m)");
@@ -34,6 +34,7 @@ SpaceTimeHeatConduction::SpaceTimeHeatConduction(const InputParameters & pars)
 Real
 SpaceTimeHeatConduction::computeQpResidual()
 {
+  // time dimension is x (i.e. first dimension)
   Real residual = 0;
 
   // spatial temperature diffusion term:
@@ -50,8 +51,10 @@ SpaceTimeHeatConduction::computeQpResidual()
   // temperature time derivative term
   // rho*c_v*int(w*gradu dV)
   // mask gradient to exclude spatial dimensions
-  grad_u = RealGradient(_grad_u[_qp]);
-  residual += -1 * _density * _heat_cap * _test[_i][_qp] * grad_u(0);
+  residual += -1 * _density * _heat_cap * _test[_i][_qp] * _grad_u[_qp](0);
+
+  std::cout << "gradu_x=" << grad_u(1) << ", gradu_t=" << _grad_u[_qp](0) << "\n";
+  std::cout << "i=" << _i << ", j=" << _j << ", qp=" << _q_point[_qp] << ", xresidual=" << residual << ", tresidual=" << -1 * _density * _heat_cap * _test[_i][_qp] * _grad_u[_qp](0) << "\n";
 
   return residual;
 }
