@@ -2,11 +2,11 @@
   type = GeneratedMesh
   dim = 2
 
-  nx = 10
+  nx = 40
   xmin = 0
   xmax = 10
 
-  ny = 10
+  ny = 40
   ymin = 0
   ymax = 10
 []
@@ -21,10 +21,6 @@
 []
 
 [Kernels]
-  #[./diff]
-  #  type = Diffusion
-  #  variable = T
-  #[../]
   [./spacetime]
     type = SpaceTimeHeatConduction
     variable = T
@@ -32,10 +28,10 @@
     heat_cap = 1.0   # (J/kg/K)
     density = 0.1    # (kg/m^3)
     source_rad = 1.0 # source radius
-    source = 0.0     # source strength (W/m^3)
-    source_t = '0 10'
-    source_x = '0 10'
-    source_y = '0 10' # unused for 1d spatial problem (i.e. 2d tot)
+    source = -5.1     # source strength (W/m^3) (needs to be negative - why?)
+    source_t = '0 5 10'
+    source_x = '0 10 5'
+    source_y = '0 0 0' # unused for 1d spatial problem (i.e. 2d tot)
   [../]
 []
 
