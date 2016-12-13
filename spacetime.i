@@ -28,7 +28,7 @@
     heat_cap = 1.0   # (J/kg/K)
     density = 0.1    # (kg/m^3)
     source_rad = 1.0 # source radius
-    source = -5.1     # source strength (W/m^3) (needs to be negative - why?)
+    source = 5.1     # source strength (W/m^3)
     source_t = '0 5 10'
     source_x = '0 10 5'
     source_y = '0 0 0' # unused for 1d spatial problem (i.e. 2d tot)
@@ -36,31 +36,25 @@
 []
 
 [BCs]
-  [./bottom] # x=0
+  [./spatial] # x=0, x=L
     type = DirichletBC
     variable = T
-    boundary = bottom
+    boundary = 'top bottom'
     value = 5
   [../]
-  [./top] # x=L
-    type = DirichletBC
-    variable = T
-    boundary = top
-    value = 5
-  [../]
-  [./left] # t=0
+  [./time_initial] # t=0
     type = FunctionDirichletBC
     function = bc_func
     variable = T
     boundary = left
   [../]
-  #[./right] # t=T
+  #[./time_final] # t=T
   #  type = BC
   #  k = 1.0
   #  variable = T
   #  boundary = right
   #[../]
-  #[./right] # t=T
+  #[./time_final] # t=T
   #  type = DirichletBC
   #  variable = T
   #  boundary = right

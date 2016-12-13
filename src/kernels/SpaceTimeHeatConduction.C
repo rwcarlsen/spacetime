@@ -44,7 +44,8 @@ SpaceTimeHeatConduction::computeQpResidual()
   residual += _k * _grad_test[_i][_qp] * grad_u;
 
   // source term: int(w*S dV)
-  residual += _test[_i][_qp] * source();
+  // I'm not sure why, but this needs the negative multipier...
+  residual += -1 * _test[_i][_qp] * source();
 
   //std::cout << "i=" << _i << ",j=" << _j << ", x=" << _q_point[_qp](1) << ", t=" << _q_point[_qp](0) << "\n";
   //std::cout << "    gradu_x=" << _grad_u[_qp](1) << ", gradu_t=" << _grad_u[_qp](0) << "\n";
@@ -65,9 +66,7 @@ SpaceTimeHeatConduction::source() {
   Real y = ylin.sample(p(0));
 
   Real dist = std::sqrt((p(1) - x)*(p(1) - x) + (p(2) - y)*(p(2) - y));
-  if (dist > _source_rad)
-    return 0;
-  return _source;
+  return _source * std::exp(-1*std::pow(0.5*_source_rad*dist, 2.0));
 }
 
 Real
