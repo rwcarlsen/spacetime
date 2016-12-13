@@ -17,7 +17,6 @@ BC::BC(const InputParameters & pars)
 RealGradient
 BC::computeQpFluxResidual()
 {
-  //
   // int(k*w*gradu dSurface)
   auto grad_u = RealGradient(_grad_u[_qp]);
   grad_u(0) = 0;

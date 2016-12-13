@@ -9,7 +9,7 @@ InputParameters validParams<SpaceTimeHeatConduction>()
   pars.addClassDescription("Heat conduction treating the 1st spatial dim as time.");
   pars.addParam<Real>("k", 1.0, "thermal conductivity (W/m/K)");
   pars.addParam<Real>("heat_cap", 1.0, "heat capacity (J/kg/K)");
-  pars.addParam<Real>("density", 1000, "material density (kg/m^3)");
+  pars.addParam<Real>("density", 1.0, "material density (kg/m^3)");
   pars.addParam<Real>("source_rad", 1.0, "source radius (m)");
   pars.addParam<Real>("source", 1.0, "source strength (W/m^3)");
   pars.addRequiredParam<std::vector<Real>>("source_t", "source t positions (m)");
@@ -37,22 +37,19 @@ SpaceTimeHeatConduction::computeQpResidual()
   // time dimension is x (i.e. first dimension)
   Real residual = 0;
 
-  // spatial temperature diffusion term:
-  // int(k*gradw*gradu dV)
+  // spatial temperature diffusion term: int(k*gradw*gradu dV)
   // mask gradient to exclude time dimension
   auto grad_u = RealGradient(_grad_u[_qp]);
   grad_u(0) = 0;
   residual += _k * _grad_test[_i][_qp] * grad_u;
 
-  // source term:
-  // int(w*S dV)
+  // source term: int(w*S dV)
   residual += _test[_i][_qp] * source();
 
   std::cout << "i=" << _i << ",j=" << _j << ", x=" << _q_point[_qp](1) << ", t=" << _q_point[_qp](0) << "\n";
   std::cout << "    gradu_x=" << _grad_u[_qp](1) << ", gradu_t=" << _grad_u[_qp](0) << "\n";
-  std::cout << "    xresidual=" << residual << ", tresidual=" << -1 * _density * _heat_cap * _test[_i][_qp] * _grad_u[_qp](0) << "\n";
-  // temperature time derivative term
-  // rho*c_v*int(w*gradu dV)
+  //std::cout << "    xresidual=" << residual << ", tresidual=" << -1 * _density * _heat_cap * _test[_i][_qp] * _grad_u[_qp](0) << "\n";
+  // temperature time derivative term: rho*c_v*int(w*gradu dV)
   // mask gradient to exclude spatial dimensions
   residual += -1 * _density * _heat_cap * _test[_i][_qp] * _grad_u[_qp](0);
 

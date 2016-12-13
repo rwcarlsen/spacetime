@@ -25,11 +25,12 @@
   #  type = Diffusion
   #  variable = T
   #[../]
-  [./diff]
+  [./spacetime]
     type = SpaceTimeHeatConduction
     variable = T
     k = 1.0          # (W/m/K)
     heat_cap = 1.0   # (J/kg/K)
+    density = 0.1    # (kg/m^3)
     source_rad = 1.0 # source radius
     source = 0.0     # source strength (W/m^3)
     source_t = '0 10'
@@ -63,6 +64,12 @@
   #  variable = T
   #  boundary = right
   #[../]
+  #[./right] # t=T
+  #  type = DirichletBC
+  #  variable = T
+  #  boundary = right
+  #  value = 5
+  #[../]
 []
 
 [Functions]
@@ -81,14 +88,13 @@
   petsc_options_value = 'hypre boomeramg'
 []
 
-#[Preconditioning]
-#  active = 'FDP'
-#
-#  [./FDP]
-#    type = FDP
-#    full = true
-#  [../]
-#[]
+[Preconditioning]
+  active = 'FDP'
+  [./FDP]
+    type = FDP
+    full = true
+  [../]
+[]
 
 [Outputs]
   exodus = true
