@@ -41,15 +41,15 @@ SpaceTimeHeatConduction::computeQpResidual()
   // mask gradient to exclude time dimension
   auto grad_u = RealGradient(_grad_u[_qp]);
   grad_u(0) = 0;
-  residual += _k * _grad_test[_i][_qp] * grad_u;
+  residual += -1 * _k * _grad_test[_i][_qp] * grad_u;
 
   // source term: int(w*S dV)
   // I'm not sure why, but this needs the negative multipier...
-  residual += -1 * _test[_i][_qp] * source();
+  residual += _test[_i][_qp] * source();
 
   //std::cout << "i=" << _i << ",j=" << _j << ", x=" << _q_point[_qp](1) << ", t=" << _q_point[_qp](0) << "\n";
   //std::cout << "    gradu_x=" << _grad_u[_qp](1) << ", gradu_t=" << _grad_u[_qp](0) << "\n";
-  std::cout << "    xresidual=" << residual << ", tresidual=" << -1 * _density * _heat_cap * _test[_i][_qp] * _grad_u[_qp](0) << ", source=" << _test[_i][_qp] * source() << "\n";
+  //std::cout << "    xresidual=" << residual << ", tresidual=" << -1 * _density * _heat_cap * _test[_i][_qp] * _grad_u[_qp](0) << ", source=" << _test[_i][_qp] * source() << "\n";
   // temperature time derivative term: rho*c_v*int(w*gradu dV)
   // mask gradient to exclude spatial dimensions
   residual += -1 * _density * _heat_cap * _test[_i][_qp] * _grad_u[_qp](0);
@@ -72,5 +72,8 @@ SpaceTimeHeatConduction::source() {
 Real
 SpaceTimeHeatConduction::computeQpJacobian() {
   return 0;
+  //auto grad_phi = RealGradient(_grad_phi[_j][_qp]);
+  //grad_phi(0) = 0;
+  //return -1*_k*grad_phi*_grad_test[_i][_qp] + -1*_density*_heat_cap*_test[_i][_qp]*_grad_phi[_j][_qp](0);
 }
 

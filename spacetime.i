@@ -26,9 +26,9 @@
     variable = T
     k = 1.0          # (W/m/K)
     heat_cap = 1.0   # (J/kg/K)
-    density = 0.1    # (kg/m^3)
+    density = 1.0    # (kg/m^3)
     source_rad = 1.0 # source radius
-    source = 5.1     # source strength (W/m^3)
+    source = 1.1     # source strength (W/m^3)
     source_t = '0 5 10'
     source_x = '0 10 5'
     source_y = '0 0 0' # unused for 1d spatial problem (i.e. 2d tot)
