@@ -2,11 +2,11 @@
   type = GeneratedMesh
   dim = 2
 
-  nx = 40
+  nx = 8
   xmin = 0
-  xmax = 10
+  xmax = 20
 
-  ny = 40
+  ny = 4
   ymin = 0
   ymax = 10
 []
@@ -27,11 +27,11 @@
     k = 1.0          # (W/m/K)
     heat_cap = 1.0   # (J/kg/K)
     density = 1.0    # (kg/m^3)
-    source_rad = 1.0 # source radius
-    source = 1.1     # source strength (W/m^3)
-    source_t = '0 5 10'
-    source_x = '0 10 5'
-    source_y = '0 0 0' # unused for 1d spatial problem (i.e. 2d tot)
+    source_rad = 0.4 # source radius
+    source = 1.7     # source strength (W/m^3)
+    source_t = '0  2  8 20'
+    source_x = '-5 0 10 15'
+    source_y = '0 0 0 0' # unused for 1d spatial problem (i.e. 2d tot)
   [../]
 []
 
@@ -68,6 +68,27 @@
     value = sqrt(25-(y-5)^2)+5
     #vars = 'alpha'
     #vals = '16'
+  [../]
+[]
+
+[Adaptivity]
+  marker = errorfrac
+  steps = 7
+
+  [./Indicators]
+    [./error]
+      type = GradientJumpIndicator
+      variable = T
+    [../]
+  [../]
+
+  [./Markers]
+    [./errorfrac]
+      type = ErrorFractionMarker
+      refine = 0.4
+      coarsen = 0.2
+      indicator = error
+    [../]
   [../]
 []
 

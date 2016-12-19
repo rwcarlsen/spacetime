@@ -66,7 +66,7 @@ SpaceTimeHeatConduction::source() {
   Real y = ylin.sample(p(0));
 
   Real dist = std::sqrt((p(1) - x)*(p(1) - x) + (p(2) - y)*(p(2) - y));
-  return _source * std::exp(-1*std::pow(0.5*_source_rad*dist, 2.0));
+  return _source * std::exp(-1*std::pow(0.5/_source_rad*dist, 2.0));
 }
 
 Real
