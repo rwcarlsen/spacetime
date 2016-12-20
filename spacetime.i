@@ -48,18 +48,6 @@
     variable = T
     boundary = left
   [../]
-  #[./time_final] # t=T
-  #  type = BC
-  #  k = 1.0
-  #  variable = T
-  #  boundary = right
-  #[../]
-  #[./time_final] # t=T
-  #  type = DirichletBC
-  #  variable = T
-  #  boundary = right
-  #  value = 5
-  #[../]
 []
 
 [Functions]
@@ -73,7 +61,7 @@
 
 [Adaptivity]
   marker = errorfrac
-  steps = 10
+  steps = 6
 
   [./Indicators]
     [./error]
@@ -85,8 +73,8 @@
   [./Markers]
     [./errorfrac]
       type = ErrorFractionMarker
-      refine = 0.4
-      coarsen = 0.2
+      refine = 0.65
+      coarsen = 0.0
       indicator = error
     [../]
   [../]
