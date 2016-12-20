@@ -73,7 +73,7 @@
 
 [Adaptivity]
   marker = errorfrac
-  steps = 7
+  steps = 10
 
   [./Indicators]
     [./error]
