@@ -87,13 +87,13 @@
   petsc_options_value = 'hypre boomeramg'
 []
 
-[Preconditioning]
-  active = 'FDP'
-  [./FDP]
-    type = FDP
-    full = true
-  [../]
-[]
+#[Preconditioning]
+#  active = 'FDP'
+#  [./FDP]
+#    type = FDP
+#    full = true
+#  [../]
+#[]
 
 [Outputs]
   exodus = true

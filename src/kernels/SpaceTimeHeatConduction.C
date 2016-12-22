@@ -71,9 +71,8 @@ SpaceTimeHeatConduction::source() {
 
 Real
 SpaceTimeHeatConduction::computeQpJacobian() {
-  return 0;
-  //auto grad_phi = RealGradient(_grad_phi[_j][_qp]);
-  //grad_phi(0) = 0;
-  //return -1*_k*grad_phi*_grad_test[_i][_qp] + -1*_density*_heat_cap*_test[_i][_qp]*_grad_phi[_j][_qp](0);
+  auto grad_phi = RealGradient(_grad_phi[_j][_qp]);
+  grad_phi(0) = 0;
+  return -1*_k*grad_phi*_grad_test[_i][_qp] + -1*_density*_heat_cap*_test[_i][_qp]*_grad_phi[_j][_qp](0);
 }
 
