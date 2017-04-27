@@ -44,7 +44,6 @@ SpaceTimeHeatConduction::computeQpResidual()
   residual += -1 * _k * _grad_test[_i][_qp] * grad_u;
 
   // source term: int(w*S dV)
-  // I'm not sure why, but this needs the negative multipier...
   residual += _test[_i][_qp] * source();
 
   //std::cout << "i=" << _i << ",j=" << _j << ", x=" << _q_point[_qp](1) << ", t=" << _q_point[_qp](0) << "\n";

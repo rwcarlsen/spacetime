@@ -54,8 +54,6 @@
   [./bc_func]
     type = ParsedFunction
     value = sqrt(25-(y-5)^2)+5
-    #vars = 'alpha'
-    #vals = '16'
   [../]
 []
 
@@ -86,14 +84,6 @@
   petsc_options_iname = '-pc_type -pc_hypre_type'
   petsc_options_value = 'hypre boomeramg'
 []
-
-#[Preconditioning]
-#  active = 'FDP'
-#  [./FDP]
-#    type = FDP
-#    full = true
-#  [../]
-#[]
 
 [Outputs]
   exodus = true
