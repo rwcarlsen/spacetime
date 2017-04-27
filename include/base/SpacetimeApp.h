@@ -3,16 +3,16 @@
 
 #include "MooseApp.h"
 
-class StorkApp;
+class SpacetimeApp;
 
 template<>
-InputParameters validParams<StorkApp>();
+InputParameters validParams<SpacetimeApp>();
 
-class StorkApp : public MooseApp
+class SpacetimeApp : public MooseApp
 {
 public:
-  StorkApp(InputParameters parameters);
-  virtual ~StorkApp();
+  SpacetimeApp(InputParameters parameters);
+  virtual ~SpacetimeApp();
 
   static void registerApps();
   static void registerObjects(Factory & factory);

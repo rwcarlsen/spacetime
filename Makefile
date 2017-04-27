@@ -20,13 +20,34 @@ include $(FRAMEWORK_DIR)/build.mk
 include $(FRAMEWORK_DIR)/moose.mk
 
 ################################## MODULES ####################################
-ALL_MODULES := no
+# To use certain physics included with MOOSE, set variables below to
+# yes as needed.  Or set ALL_MODULES to yes to turn on everything (overrides
+# other set variables).
+
+ALL_MODULES         := no
+
+CHEMICAL_REACTIONS  := no
+CONTACT             := no
+FLUID_PROPERTIES    := no
+HEAT_CONDUCTION     := yes
+MISC                := no
+NAVIER_STOKES       := no
+PHASE_FIELD         := no
+RDG                 := no
+RICHARDS            := no
+SOLID_MECHANICS     := no
+STOCHASTIC_TOOLS    := no
+TENSOR_MECHANICS    := no
+WATER_STEAM_EOS     := no
+XFEM                := no
+POROUS_FLOW         := no
+
 include $(MOOSE_DIR)/modules/modules.mk
 ###############################################################################
 
 # dep apps
 APPLICATION_DIR    := $(CURDIR)
-APPLICATION_NAME   := stork
+APPLICATION_NAME   := spacetime
 BUILD_EXEC         := yes
 DEP_APPS           := $(shell $(FRAMEWORK_DIR)/scripts/find_dep_apps.py $(APPLICATION_NAME))
 include            $(FRAMEWORK_DIR)/app.mk
